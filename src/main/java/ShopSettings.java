@@ -30,12 +30,8 @@ public class ShopSettings {
 					ShopSettings.createTableShop();
 					break;
 				case 3:
-					ShopSettings.LoadData();
-					break;
-				case 4:
 					MainMenu.main(null);
 					break;
-
 				}
 			}
 			exit = false;
@@ -57,28 +53,13 @@ public class ShopSettings {
 			System.out.println("how many records you want to insert :");
 			int s = scanner.nextInt();
 			
-
-			
 			for (int i = 0; i < s; i++) {
 				
 				System.out.println("Enter ShopName :");
 				String ShopName = scanner.next();
 
-				System.out.println("Enter Tel");
-				String Tel = scanner.next();
-
-				System.out.println("Enter Fax");
-				String Fax = scanner.next();
-
-				System.out.println("Enter Email");
-				String Email =  scanner.next();
-
-				System.out.println("Enter Website");
-				String Website = scanner.next();
-				
-				String sql = "insert into Shop (ShopName,Tel,Fax,Email,Website)" + "values('"
-						+ ShopName + "','" + Tel + "','" + Fax + "','" + Email + "','"
-						+ Website + "')";
+				String sql = "insert into Shop (ShopName)" + "values('"
+						+ ShopName +"')";
 
 				try {
 
@@ -115,8 +96,9 @@ public class ShopSettings {
 		Connection conn = null;
 
 		try {
-			String sql = ("CREATE TABLE Shop (" + "ShopId int Primary Key AUTO_INCREMENT," + "ShopName varchar(225),"
-					+ "Tel varchar(50)," + "Fax varchar(50)," + "Email varchar(250)," + "Website  varchar(250))");
+			String sql = ("CREATE TABLE Shop (" + "ShopId int Primary Key AUTO_INCREMENT," 
+		+ "ShopName varchar(225),"
+		+"ShpDetailId int REFERENCES ShopDetails(Id))");
 
 			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
