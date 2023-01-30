@@ -7,144 +7,196 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class ShopSettings {
-public static void main()throws Exception {
-		
+	public static void main() throws Exception {
+
 		try {
 			boolean exit = true;
 			while (exit) {
-		Scanner sc = new Scanner(System.in);
-	System.out.println("\t \t 1:Load Data \t \t");
-	System.out.println("\t \t 2:Set Shop Name and Invoice Header \t \t");
-	System.out.println("\t \t 3:Go Back  \t \t");
-	System.out.println(" *********************************************** ");
-  	 Scanner scanner = new Scanner(System.in);
+				Scanner sc = new Scanner(System.in);
+				System.out.println("\t \t 1:Load Data \t \t");
+				System.out.println("\t \t 2:Set Shop Name and Invoice Header \t \t");
+				System.out.println("\t \t 3:Go Back  \t \t");
+				System.out.println(" *********************************************** ");
+				Scanner scanner = new Scanner(System.in);
 
-    int option = sc.nextInt();
-	switch (option) {
-	
-	case 1:
-		ShopSettings.LoadData();
-	break;
+				int option = sc.nextInt();
+				switch (option) {
 
-	case 2:
-		ShopSettings.createTableShop();
-	break;
-	case 3:
-		MainMenu.main(null);
-		break;
+				case 1:
+					ShopSettings.LoadData();
+					break;
 
-	}
-			}exit = false;
-			} catch (Exception e) {
-				System.out.println(e);
+				case 2:
+					ShopSettings.createTableShop();
+					break;
+				case 3:
+					ShopSettings.LoadData();
+					break;
+				case 4:
+					MainMenu.main(null);
+					break;
+
+				}
 			}
-	
+			exit = false;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 	}
 
+	public static void LoadData() throws Exception {
 
-public static void LoadData(){
+			final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
+			Scanner scanner = new Scanner(System.in);
 
-	final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
-	   final String user = "root";
-	   final String pass = "root";
-	   
-	   
-	   
-//	  String QUERY = "SELECT * FROM Select *from  invoice,items where InvoiceId=itemId";
-	  String QUERY = "SELECT Items.*,Invoice.* FROM Items"
-	  		+ "inner JOIN Invoice"
-	  		+ "On Items.itemId=Invoice.itmId";
+			final String user = "root";
+			final String pass = "root";
+			Connection conn = null;
 
-	      Connection conn=null;
-	      
-	 try {
-		 conn = DriverManager.getConnection(url, user, pass);
-	 Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-     Statement stmt = conn.createStatement();
-     DriverManager.registerDriver(driver);
-     ResultSet rs=stmt.executeQuery(QUERY);
-
-		 while(rs.next()) {
-			int InvoiceId=rs.getInt("InvoiceId");
-			String customerFullName=rs.getString("customerFullName");
-			Date invoiceDate=rs.getDate("invoiceDate");
-			int numberOfItems=rs.getInt("numberOfItems");
-			int totalAmount=rs.getInt("totalAmount");
-			int paidAmount=rs.getInt("paidAmount");
-			int balance=rs.getInt("balance");
-			String itmId=rs.getString("itmId");
-			String itemId=rs.getString("itemId");
-            String ItemName=rs.getString("ItemName");
-			String unitPrice=rs.getString("unitPrice");
-			String quantity=rs.getString("quantity");
-			String qtyAmount_price=rs.getString("qtyAmount_price");
+			System.out.println("how many records you want to insert :");
+			int s = scanner.nextInt();
 			
+
 			
-			
-		     System.out.println("InvoiceId :" + InvoiceId);
-		     System.out.println("customerFullName :" +customerFullName);
-		     System.out.println("invoiceDate" +invoiceDate);
-		     System.out.println("numberOfItems" +numberOfItems);
-		     System.out.println("totalAmount" +totalAmount);
-		     System.out.println("paidAmount" +paidAmount);
-		     System.out.println("balance"+balance);
-		     System.out.println("itmId"+itmId);
-		     System.out.println("itemId"+itemId);
-		     System.out.println("ItemName"+ItemName);
-		     System.out.println("unitPrice"+unitPrice);
-		     System.out.println("quantity"+quantity);
-		     System.out.println("qtyAmount_price"+qtyAmount_price);
+			for (int i = 0; i < s; i++) {
+				
+				System.out.println("Enter ShopName :");
+				String ShopName = scanner.next();
 
-		     System.out.println("===========================================================");
-		   
-		 }
-		 conn.close() ;
-	 }  catch (Exception ex) {
-           
-            System.err.println(ex);
-}
-}
+				System.out.println("Enter Tel");
+				String Tel = scanner.next();
 
-public static void createTableShop() throws Exception {
+				System.out.println("Enter Fax");
+				String Fax = scanner.next();
 
-	final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
+				System.out.println("Enter Email");
+				String Email =  scanner.next();
 
-	final String user = "root";
-	final String pass = "root";
-	Connection conn = null;
-//	String sql = ("CREATE TABLE Items(" + "itemId int Primary Key AUTO_INCREMENT,"
-//			+ " ItemName varchar(225),"
-//			+ " unitPrice Integer,"
-//			+ "quantity Integer," 
-//			+ "qtyAmount_price Integer)");
-	try {
-		String sql = ("CREATE TABLE Shop (" + "ShopId int Primary Key AUTO_INCREMENT,"
-				+"ShopName varchar(225)," 
-				+"Tel varchar(50),"
-		        +"Fax varchar(50),"
-		        +"Email varchar(250),"
-		        +"Website  varchar(250))");
-		
-		Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+				System.out.println("Enter Website");
+				String Website = scanner.next();
+				
+				String sql = "insert into Shop (ShopName,Tel,Fax,Email,Website)" + "values('"
+						+ ShopName + "','" + Tel + "','" + Fax + "','" + Email + "','"
+						+ Website + "')";
 
-		DriverManager.registerDriver(driver);
+				try {
 
-		conn = DriverManager.getConnection(url, user, pass);
-		Statement st = conn.createStatement();
+					Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
-		int m = st.executeUpdate(sql);
-		if (m >= 0)
-			{System.out.println("Created table in given database...");
+					DriverManager.registerDriver(driver);
 
-			}else {
-			System.out.println("failed to create");
+					conn = DriverManager.getConnection(url, user, pass);
+					Statement st = conn.createStatement();
+
+					int m = st.executeUpdate(sql);
+					if (m >= 0) {
+						System.out.println("inserted in given database...");
+					} else {
+						System.out.println("failed");
+					}
+
+					conn.close();
+
+				} catch (Exception ex) {
+
+					System.err.println(ex);
+				}
 			}
-		conn.close();
-	} catch (Exception ex) {
 
-		System.err.println(ex);
+		}	
+	
+	public static void createTableShop() throws Exception {
+
+		final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
+
+		final String user = "root";
+		final String pass = "root";
+		Connection conn = null;
+
+		try {
+			String sql = ("CREATE TABLE Shop (" + "ShopId int Primary Key AUTO_INCREMENT," + "ShopName varchar(225),"
+					+ "Tel varchar(50)," + "Fax varchar(50)," + "Email varchar(250)," + "Website  varchar(250))");
+
+			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+
+			DriverManager.registerDriver(driver);
+
+			conn = DriverManager.getConnection(url, user, pass);
+			Statement st = conn.createStatement();
+
+			int m = st.executeUpdate(sql);
+			if (m >= 0) {
+				System.out.println("Created table in given database...");
+
+			} else {
+				System.out.println("failed to create");
+			}
+			conn.close();
+		} catch (Exception ex) {
+
+			System.err.println(ex);
+		}
 	}
+
 }
 
 
-}
+
+
+
+//final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
+//final String user = "root";
+//final String pass = "root";
+//
+//String QUERY = "SELECT * FROM invoice,items";
+////String QUERY = "SELECT * FROM invoice,items where InvoiceId=itemId";
+////String QUERY = "SELECT Items.*,Invoice.* FROM Items" + "inner JOIN Invoice" + "On Items.itemId=Invoice.itmId";
+//
+//Connection conn = null;
+//
+//try {
+//	conn = DriverManager.getConnection(url, user, pass);
+//	Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+//	Statement stmt = conn.createStatement();
+//	DriverManager.registerDriver(driver);
+//	ResultSet rs = stmt.executeQuery(QUERY);
+//
+//	while (rs.next()) {
+//		int InvoiceId = rs.getInt("InvoiceId");
+//		String customerFullName = rs.getString("customerFullName");
+//		Date invoiceDate = rs.getDate("invoiceDate");
+//		int numberOfItems = rs.getInt("numberOfItems");
+//		int totalAmount = rs.getInt("totalAmount");
+//		int paidAmount = rs.getInt("paidAmount");
+//		int balance = rs.getInt("balance");
+//		String itmId = rs.getString("itmId");
+//		String itemId = rs.getString("itemId");
+//		String ItemName = rs.getString("ItemName");
+//		String unitPrice = rs.getString("unitPrice");
+//		String quantity = rs.getString("quantity");
+//		String qtyAmount_price = rs.getString("qtyAmount_price");
+//
+//		System.out.println("InvoiceId :" + InvoiceId);
+//		System.out.println("customerFullName :" + customerFullName);
+//		System.out.println("invoiceDate" + invoiceDate);
+//		System.out.println("numberOfItems" + numberOfItems);
+//		System.out.println("totalAmount" + totalAmount);
+//		System.out.println("paidAmount" + paidAmount);
+//		System.out.println("balance" + balance);
+//		System.out.println("itmId" + itmId);
+//		System.out.println("itemId" + itemId);
+//		System.out.println("ItemName" + ItemName);
+//		System.out.println("unitPrice" + unitPrice);
+//		System.out.println("quantity" + quantity);
+//		System.out.println("qtyAmount_price" + qtyAmount_price);
+//
+//		System.out.println("===========================================================");
+//
+//	}
+//	conn.close();
+//} catch (Exception ex) {
+//
+//	System.err.println(ex);
+//}
+//}
