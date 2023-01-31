@@ -78,7 +78,7 @@ public static void createTableItems() throws Exception {
 				 + " unitPrice Integer,"
 	             + "quantity Integer," 
 			   	 + "qtyAmount_price Integer,"
-	             +"ShpId int REFERENCES Shop(ShopId))");
+	             +"ShpId Integer REFERENCES Shop(ShopId))");
 
 		Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
@@ -130,10 +130,13 @@ public static void createTableItems() throws Exception {
 
 	   			     System.out.println("Enter qtyAmount_price");
 	   			     double qtyAmount_price = scanner.nextDouble();
+
+	   				System.out.println("Enter ShopName");
+	   				String ShopName = scanner.next();
+
 					 
-					 
-				String sql = "insert into Items (ItemName,unitPrice,quantity,qtyAmount_price)"
-						+ "values('"+ItemName+"','" +unitPrice+"','"+quantity+"','"+qtyAmount_price+"')";	
+	   				String QUERY = "SELECT ShopId FROM Shop where ShopName='" + ShopName+"'";
+
 				
 				try {
 				 
@@ -142,9 +145,21 @@ public static void createTableItems() throws Exception {
 				DriverManager.registerDriver(driver);
 
 				conn = DriverManager.getConnection(url, user, pass);
-				Statement st = conn.createStatement();
-		
-				int m = st.executeUpdate(sql);
+				Statement stmt = conn.createStatement();
+				
+
+				int ShId=0;
+				ResultSet rs = stmt.executeQuery(QUERY);
+				while(rs.next()) {
+					ShId = rs.getInt("ShopId");
+				}
+				System.out.println(ShId);
+
+				String sql = "insert into Items (ItemName,unitPrice,quantity,qtyAmount_price,ShpId)"
+						+ "values('"+ItemName+"','" +unitPrice+"','"+quantity+"','"+qtyAmount_price+ "','"
+						+ ShId + "')";
+				
+				int m = stmt.executeUpdate(sql);
 				if (m >= 0) 
 					{System.out.println("inserted in given database...");
 					}

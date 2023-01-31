@@ -55,11 +55,13 @@ public class ShopSettings {
 			
 			for (int i = 0; i < s; i++) {
 				
+				
 				System.out.println("Enter ShopName :");
 				String ShopName = scanner.next();
 
 				String sql = "insert into Shop (ShopName)" + "values('"
-						+ ShopName +"')";
+				+ ShopName +"')";
+				
 
 				try {
 
@@ -97,8 +99,7 @@ public class ShopSettings {
 
 		try {
 			String sql = ("CREATE TABLE Shop (" + "ShopId int Primary Key AUTO_INCREMENT," 
-		+ "ShopName varchar(225),"
-		+"ShpDetailId int REFERENCES ShopDetails(Id))");
+		+ "ShopName varchar(225))");
 
 			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 

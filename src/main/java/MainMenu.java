@@ -3,11 +3,15 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class MainMenu {
 
 	public static void main(String[] args) throws Exception {
-		Scanner sc = new Scanner(System.in);
+		
+		Scanner scanner = new Scanner(System.in);
+
+		Stack<String> Stacc = new Stack<String>();
 
 		try {
 			boolean exit = true;
@@ -27,9 +31,16 @@ public class MainMenu {
 				System.out.println("\t \t  9:Program Statistic \t \t");
 				System.out.println("\t \t  10:Exit  \t \t");
 				System.out.println(" *********************************************** ");
-				Scanner scanner = new Scanner(System.in);
-
-				int option = sc.nextInt();
+				
+				
+				
+//				int print = scanner.nextInt();
+//				String stakk=String.valueOf(print);
+//				Stacc.push(stakk);
+				
+				
+				
+				int option = scanner.nextInt();
 				switch (option) {
 
 				case 1:
@@ -46,9 +57,31 @@ public class MainMenu {
 					shopDetails.main();
 					break;
 				case 5:
+					Invoice.insert();
+					break;
+				case 6:
+					reportStatistics.ReportStcs();
+
+					break;
+				case 7:
+					reportStatistics.ReportInvoices();
+
+					break;
+				case 8:
+					reportStatistics.Search();
+
+					break;
+				case 9:
+					try {
+						Stack<String> stac = (Stack<String>) Stacc;
+						System.out.println(stac);
+					} catch (Exception e) {
+					}
+					break;
+				case 10:
 					System.out.println(
 							"Are you sure you want to exit? If yes press 0, if you want back to menue press 1");
-					int num = sc.nextInt();
+					int num = scanner.nextInt();
 					if (num == 0) {
 						System.out.println("The Exit exist...");
 						System.exit(0);

@@ -1,12 +1,12 @@
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
 
 public class shopDetails {
-	
-	
+
 	public static void main() throws Exception {
 
 		try {
@@ -41,10 +41,9 @@ public class shopDetails {
 		}
 
 	}
-	
-	
+
 	public static void createTableShopDetais() throws Exception {
-		
+
 		final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
 
 		final String user = "root";
@@ -52,8 +51,9 @@ public class shopDetails {
 		Connection conn = null;
 
 		try {
-			String sql = ("CREATE TABLE ShopDetails (" + "Id int Primary Key AUTO_INCREMENT,"
-					+ "Tel varchar(50)," + "Fax varchar(50)," + "Email varchar(250)," + "Website  varchar(250))");
+			String sql = ("CREATE TABLE ShopDetails (" + "Id int Primary Key AUTO_INCREMENT," + "Tel varchar(50),"
+					+ "Fax varchar(50)," + "Email varchar(250)," + "Website  varchar(250),"
+					+"ShpId Integer REFERENCES Shop(ShopId))");
 
 			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
@@ -75,8 +75,7 @@ public class shopDetails {
 			System.err.println(ex);
 		}
 	}
-	
-	
+
 	public static void insert() throws Exception {
 
 		final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
@@ -88,7 +87,7 @@ public class shopDetails {
 
 		System.out.println("how many records you want to insert :");
 		int s = scanner.nextInt();
-		
+
 		for (int i = 0; i < s; i++) {
 			System.out.println("Enter Tel");
 			String Tel = scanner.next();
@@ -97,14 +96,16 @@ public class shopDetails {
 			String Fax = scanner.next();
 
 			System.out.println("Enter Email");
-			String Email =  scanner.next();
+			String Email = scanner.next();
 
 			System.out.println("Enter Website");
 			String Website = scanner.next();
-			
-			String sql = "insert into ShopDetails (Tel,Fax,Email,Website)" + "values('"+ Tel + "','" + Fax + "','" + Email + "','"
-					+ Website + "')";
 
+			System.out.println("Enter ShopName");
+				String ShopName = scanner.next();
+
+			String QUERY = "SELECT ShopId FROM Shop where ShopName='" + ShopName+"'";
+			
 			try {
 
 				Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -112,15 +113,25 @@ public class shopDetails {
 				DriverManager.registerDriver(driver);
 
 				conn = DriverManager.getConnection(url, user, pass);
-				Statement st = conn.createStatement();
+				Statement stmt = conn.createStatement();
+				
+				
+				int ShId=0;
+				ResultSet rs = stmt.executeQuery(QUERY);
+				while(rs.next()) {
+					ShId = rs.getInt("ShopId");
+				}
+				System.out.println(ShId);
 
-				int m = st.executeUpdate(sql);
+					String sql = "insert into ShopDetails (Tel,Fax,Email,Website,ShpId)" + "values('" + Tel + "','" + Fax + "','"
+							+ Email + "','" + Website + "','" + ShId+ "')";
+				int m = stmt.executeUpdate(sql);
+				
 				if (m >= 0) {
 					System.out.println("inserted in given database...");
 				} else {
 					System.out.println("failed");
 				}
-
 				conn.close();
 
 			} catch (Exception ex) {
@@ -129,9 +140,6 @@ public class shopDetails {
 			}
 		}
 
-	}	
-	
-	
-	
+	}
 
 }

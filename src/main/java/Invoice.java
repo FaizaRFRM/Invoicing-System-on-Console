@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -16,8 +17,7 @@ public class Invoice {
 				System.out.println("*****************  Invoice  ****************");
 				System.out.println("********************************************");
 				System.out.println("\t \t 0-create table Invoice \t \t");
-				System.out.println("\t \t 1-insert Invoice data \t \t");
-				System.out.println("\t \t 2-Go Back  \t \t");
+				System.out.println("\t \t 1-Go Back  \t \t");
 				System.out.println(" *********************************************** ");
 				Scanner scanner = new Scanner(System.in);
 
@@ -28,11 +28,8 @@ public class Invoice {
 					Invoice.createTableInvoice();
 
 					break;
+				
 				case 1:
-					Invoice.insert();
-					break;
-
-				case 2:
 					MainMenu.main(null);
 					break;
 
@@ -53,11 +50,11 @@ public class Invoice {
 		Connection conn = null;
 		try {
 			String sql = ("CREATE TABLE Invoice (" + "InvoiceId int Primary Key AUTO_INCREMENT,"
-					+ " customerFullName varchar(225)," + " invoiceDate date," + "numberOfItems Integer,"
+					+ " customerFullName varchar(225),"+ " phoneNumber varchar(225),"  + " invoiceDate date," + "numberOfItems Integer,"
 					+ "totalAmount Integer," + "paidAmount Integer," + "balance Integer,"
-					+ "itmId int REFERENCES Items(itemId),"
-					+ "detailId int REFERENCES ShopDetails(Id),"
-			        + "ShpId int REFERENCES Shop(ShopId))");
+					+ "itmId int REFERENCES Items(itemId))");
+//					+ "detailId int REFERENCES ShopDetails(Id),"
+//			        + "ShpId int REFERENCES Shop(ShopId))");
 
 			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
@@ -79,7 +76,6 @@ public class Invoice {
 			System.err.println(ex);
 		}
 	}
-
 	public static void insert() throws Exception {
 
 		final String url = "jdbc:mysql://localhost:3306/InvoicingSystem";
@@ -97,6 +93,9 @@ public class Invoice {
 //		
 			System.out.println("Enter customerFullName :");
 			String customerFullName = scanner.next();
+			
+			System.out.println("Enter  phoneNumber");
+			String phoneNumber = scanner.next();
 
 			Date invoiceDate = new Date(System.currentTimeMillis());
 
@@ -111,11 +110,16 @@ public class Invoice {
 
 			System.out.println("Enter balance");
 			int balance = scanner.nextInt();
+			
+			
+			System.out.println("Enter item name");
+				String ItemName = scanner.next();
+
+			 
+				String QUERY = "SELECT itemId FROM Items where ItemName='" + ItemName+"'";
 
 
-			String sql = "insert into Invoice (customerFullName,invoiceDate,numberOfItems,totalAmount,paidAmount,balance)" + "values('"
-					+ customerFullName + "','" + invoiceDate + "','" + numberOfItems + "','" + totalAmount + "','"
-					+ paidAmount + "','" + balance + "')";
+			
 
 			try {
 
@@ -124,9 +128,23 @@ public class Invoice {
 				DriverManager.registerDriver(driver);
 
 				conn = DriverManager.getConnection(url, user, pass);
-				Statement st = conn.createStatement();
+                Statement stmt = conn.createStatement();
+				
+				
+				int tmId=0;
+				ResultSet rs = stmt.executeQuery(QUERY);
+				while(rs.next()) {
+					tmId = rs.getInt("itemId");
+					System.out.println(tmId);
 
-				int m = st.executeUpdate(sql);
+				}
+
+				String sql = "insert into Invoice (customerFullName,phoneNumber,invoiceDate,numberOfItems,totalAmount,paidAmount,balance,itmId)" + "values('"
+						+ customerFullName+ "','" + phoneNumber + "','" + invoiceDate + "','" + numberOfItems + "','" + totalAmount + "','"
+						+ paidAmount + "','" + balance +"','" + tmId+"')";
+				
+				
+				int m = stmt.executeUpdate(sql);
 				if (m >= 0) {
 					System.out.println("inserted in given database...");
 				} else {
@@ -142,4 +160,6 @@ public class Invoice {
 		}
 
 	}
+
+	
 }
