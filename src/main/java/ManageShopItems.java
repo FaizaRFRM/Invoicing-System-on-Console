@@ -227,7 +227,9 @@ public static void updateById(){
 
 	  	System.out.println ("input Itemid you want to update");
 	      Integer Itemid=scanner.nextInt();
-	      String sql = "update Items set unitPrice='55.22' where Itemid="+Itemid;
+	      System.out.println ("input the new price");
+	      Integer newPrice=scanner.nextInt();
+	      String sql = "update Items set unitPrice='"+newPrice+"'where Itemid="+Itemid;
 			 
 			 Connection conn = null;
 	      

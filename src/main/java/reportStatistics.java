@@ -36,8 +36,9 @@ public static void ReportStcs(){
 			ResultSet rs3=stmt3.executeQuery(QUERY3);
 			
 			
+			System.out.println("No Of Items, No of Invoices, Total Sales");
 			System.out.println("===========================================================");
-
+			
 			while(rs1.next()) {
 				int InvoiceId = rs1.getInt(1);
 				System.out.println("number of Invoice:  " + InvoiceId);
@@ -122,7 +123,7 @@ public static void ReportStcs(){
 		   final String pass = "root";
 		   
 		   Scanner scanner = new Scanner(System.in);
-		  	System.out.println ("input id you want to show");
+		  	System.out.println ("input invoice no  you want to show");
 		      Integer inputID=scanner.nextInt();
 		   
 		  String QUERY = "SELECT * FROM items Inner join Invoice on  items.itemId=Invoice.InvoiceId where Invoice.InvoiceId='"+inputID+"'";
@@ -135,13 +136,6 @@ public static void ReportStcs(){
 	     Statement stmt = conn.createStatement();
 	     DriverManager.registerDriver(driver);
 	     ResultSet rs=stmt.executeQuery(QUERY);
-	     
-//	     String sql = ("CREATE TABLE Items(" + "itemId int Primary Key AUTO_INCREMENT," 
-//	             + " ItemName varchar(225),"
-//				 + " unitPrice Integer,"
-//	             + "quantity Integer," 
-//			   	 + "qtyAmount_price Integer,"
-//	             +"ShpId Integer REFERENCES Shop(ShopId))");
 
 			 while(rs.next()) {
 				 int InvoiceId = rs.getInt("InvoiceId");
