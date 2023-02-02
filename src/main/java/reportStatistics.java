@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class reportStatistics {
@@ -175,6 +177,23 @@ public static void ReportStcs(){
 	}
 	}
 	
+	
+	
+
+	public static  Map <String,Integer> menuWithCount(){
+		Map <String,Integer>countTimes=new HashMap<String,Integer>();
+		countTimes.put("1-Shop Settings", 0);
+		countTimes.put("2-Manage Shop Items", 0);
+		countTimes.put("3-Invoice details", 0);
+		countTimes.put("4-set invoice header", 0);
+		countTimes.put("5-Create New Invoice", 0);
+		countTimes.put("6-Report: Statistics", 0);
+		countTimes.put("7-Report: All Invoices", 0);
+		countTimes.put("8-Search (1) Invoic", 0);
+		countTimes.put("9-Program Statistic", 0);
+		countTimes.put("10-Exit", 0);
+		return countTimes;
+	}
 	
 	
 }
